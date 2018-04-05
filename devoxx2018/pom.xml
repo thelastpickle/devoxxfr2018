@@ -92,7 +92,7 @@
                                     implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                                 <transformer
                                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.thelastpickle.cassandra.devoxx2018.queue_first.Queue</mainClass>
+                                    <mainClass>com.thelastpickle.cassandra.devoxx2018.movielens.Loader</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
