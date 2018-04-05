@@ -8,12 +8,15 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Cluster.Builder;
+import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.QueryOptions;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.policies.DCAwareRoundRobinPolicy;
+import com.datastax.driver.core.policies.DowngradingConsistencyRetryPolicy;
 import com.datastax.driver.core.policies.TokenAwarePolicy;
 import com.datastax.driver.core.utils.UUIDs;
 import com.google.common.collect.Lists;
@@ -31,6 +34,8 @@ public final class Reader {
     Cluster cluster = Cluster.builder()
         .addContactPoint("127.0.0.1")
         .withLoadBalancingPolicy(new TokenAwarePolicy(DCAwareRoundRobinPolicy.builder().build()))
+        .withRetryPolicy(DowngradingConsistencyRetryPolicy.INSTANCE)
+        .withQueryOptions(new QueryOptions().setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM))
         .build();
     Session session = cluster.connect("devoxx");
 
