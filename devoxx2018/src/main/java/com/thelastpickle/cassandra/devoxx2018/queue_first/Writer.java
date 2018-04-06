@@ -2,6 +2,7 @@ package com.thelastpickle.cassandra.devoxx2018.queue_first;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -33,7 +34,8 @@ public final class Writer {
         .build();
     Session session = cluster.connect("devoxx");
 
-    PreparedStatement writeStatement = session.prepare("INSERT INTO devoxx.messages(id_queue, id_message, payload, published_by) values(?,?,?,?)");
+    PreparedStatement writeStatement = session
+        .prepare("INSERT INTO devoxx.messages(id_queue, id_message, payload, published_by, time_bucket) values(?,?,?,?,?)");
 
     List<ResultSetFuture> futures = Lists.newArrayList();
     for (int i = 0; i <= messagesToInsert; i++) {
@@ -42,7 +44,8 @@ public final class Writer {
       String payload = RandomStringUtils.random(50, true, true);
 
       rateLimiter.acquire();
-      futures.add(session.executeAsync(writeStatement.bind(idQueue, idMessage, payload, USER_ID)));
+      futures.add(session
+          .executeAsync(writeStatement.bind(idQueue, idMessage, payload, USER_ID, TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()))));
 
       if (i % 100 == 0) {
         // no DDoS policy
