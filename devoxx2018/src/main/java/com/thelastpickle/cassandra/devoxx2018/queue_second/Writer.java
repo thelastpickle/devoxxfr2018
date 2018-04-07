@@ -1,4 +1,4 @@
-package com.thelastpickle.cassandra.devoxx2018.queue_first;
+package com.thelastpickle.cassandra.devoxx2018.queue_second;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,13 +29,13 @@ public final class Writer {
     RateLimiter rateLimiter = RateLimiter.create(rateLimit);
 
     Cluster cluster = Cluster.builder()
-        .addContactPoint("127.0.0.1")
+        .addContactPoint("54.200.68.60")
         .withLoadBalancingPolicy(new TokenAwarePolicy(DCAwareRoundRobinPolicy.builder().build()))
         .build();
     Session session = cluster.connect("devoxx");
 
     PreparedStatement writeStatement = session
-        .prepare("INSERT INTO devoxx.messages(id_queue, id_message, payload, published_by, time_bucket) values(?,?,?,?,?)");
+        .prepare("INSERT INTO devoxx.messages_good(id_queue, id_message, payload, published_by, time_bucket, processed_by) values(?,?,?,?,?,?)");
 
     List<ResultSetFuture> futures = Lists.newArrayList();
     for (int i = 0; i <= messagesToInsert; i++) {
@@ -45,7 +45,8 @@ public final class Writer {
 
       rateLimiter.acquire();
       futures.add(session
-          .executeAsync(writeStatement.bind(idQueue, idMessage, payload, USER_ID, TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()))));
+          .executeAsync(
+              writeStatement.bind(idQueue, idMessage, payload, USER_ID, TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()), "nobody")));
 
       if (i % 100 == 0) {
         // no DDoS policy
