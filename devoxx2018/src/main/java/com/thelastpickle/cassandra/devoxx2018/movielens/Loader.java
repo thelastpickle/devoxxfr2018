@@ -19,50 +19,24 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Futures;
 
 public class Loader {
-  public static void main(String[] args) throws InterruptedException {
+  public static void main(String[] args) {
 
     Cluster cluster = Cluster.builder()
         .addContactPoint("127.0.0.1")
-        .withLoadBalancingPolicy(new TokenAwarePolicy(DCAwareRoundRobinPolicy.builder().build()))
-        .withRetryPolicy(DowngradingConsistencyRetryPolicy.INSTANCE)
-        .withQueryOptions(new QueryOptions().setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM))
         .build();
     Session session = cluster.connect("movielens");
 
-    PreparedStatement insertStatement = session
-        .prepare("INSERT INTO movies_by_first_letter (first_letter, first_word, id, avg_rating, genres, name, release_date, url, video_release_date) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    int nbFilms = 0;
 
-    ResultSet movies = session.execute("SELECT * FROM movies");
+    // Préparer la requête d'insertion
 
-    List<ResultSetFuture> futures = Lists.newArrayList();
-    int i = 0;
+    ResultSet movies = null; // Lire depuis la table movies
 
     for (Row movie:movies) {
-
-      futures.add(
-          session.executeAsync(
-              insertStatement.bind(
-                  movie.getString("name").substring(0, 1),
-                  movie.getString("name").split(" ")[0],
-                  movie.getUUID("id"),
-                  movie.getFloat("avg_rating"),
-                  movie.getSet("genres", String.class),
-                  movie.getString("name"),
-                  movie.getDate("release_date"),
-                  movie.getString("url"),
-                  movie.getDate("video_release_date"))));
-      ++i;
-
-      if (futures.size() % 100 == 0) {
-        Futures.successfulAsList(futures);
-        System.out.println(i + " films traités...");
-        futures = Lists.newArrayList();
-      }
+      // écrire en asynchrone dans la table movies_by_first_letter
     }
 
-    Futures.successfulAsList(futures);
-    System.out.println(i + " films traités...");
+    System.out.println(nbFilms + " films traités...");
     cluster.close();
   }
 
