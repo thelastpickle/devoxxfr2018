@@ -12,7 +12,7 @@ Dans votre repertoire de travail executez la commande suivante :
 
 Vagrant va monter la box dans virtual box et la booter.
 
-Arrêtez et re-lacer la:
+Arrêtez et re-lancer la:
 `vagrant halt`
 `vagrant up`
 
