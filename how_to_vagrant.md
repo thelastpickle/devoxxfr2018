@@ -32,8 +32,7 @@ Les commandes utiles :
 
 `/vagrant/cdm install movielens`
 
-`java -cp /vagrant/lib/*:/vagrant/classes/. fr.ma_classe`
-
+`java -jar /vagrant/target/devoxx2018-0.0.1-SNAPSHOT.jar`
 
 
 
