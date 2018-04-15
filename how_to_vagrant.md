@@ -30,6 +30,8 @@ Les commandes utiles :
 
 `sudo ccm node1 nodetool info`
 
+`/vagrant/cdm install movielens`
+
 `java -cp /vagrant/lib/*:/vagrant/classes/. fr.ma_classe`
 
 
