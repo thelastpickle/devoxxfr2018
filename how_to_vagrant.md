@@ -27,3 +27,10 @@ Les commandes utiles :
 `sudo ccm node1 cqlsh;`
 
 `java -cp /vagrant/lib/*:/vagrant/classes/. fr.ma_classe`
+
+
+
+Attention, bien rajoutez `sudo` devant les commandes de créations :
+
+`sudo ccm create devoxx2018 -v binary:3.0.16 -n 3`
+ 
