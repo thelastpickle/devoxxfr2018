@@ -12,6 +12,10 @@ Dans votre repertoire de travail executez la commande suivante :
 
 Vagrant va monter la box dans virtual box et la booter.
 
+Arrêtez et re-lacer la:
+`vagrant halt`
+`vagrant up`
+
 Faites un `vagrant ssh` pour vous connecter à la VM.
 
 
