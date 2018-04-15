@@ -10,3 +10,16 @@ Dans votre repertoire de travail executez la commande suivante :
 `vagrant box add devoxx2018_v1.1.box --name devoxx_box`
 
 
+Vagrant va monter la box dans virtual box et la booter.
+
+Faites un `vagrant ssh` pour vous connecter à la VM.
+
+
+
+Les commandes utiles :
+
+`sudo ccm start;`
+
+`sudo ccm node1 cqlsh;`
+
+`java -cp /vagrant/lib/*:/vagrant/classes/. fr.ma_classe`
