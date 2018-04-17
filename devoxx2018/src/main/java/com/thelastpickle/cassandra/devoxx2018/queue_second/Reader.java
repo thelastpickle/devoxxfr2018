@@ -39,7 +39,10 @@ public final class Reader implements Runnable {
         .addContactPoint("127.0.0.1")
         .withLoadBalancingPolicy(new TokenAwarePolicy(DCAwareRoundRobinPolicy.builder().build()))
         .withRetryPolicy(DowngradingConsistencyRetryPolicy.INSTANCE)
-        .withQueryOptions(new QueryOptions().setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM))
+        .withQueryOptions(
+            new QueryOptions()
+                .setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM)
+                .setSerialConsistencyLevel(ConsistencyLevel.SERIAL))
         .build();
     Session session = cluster.connect("devoxx");
 
