@@ -1,5 +1,8 @@
 Testé avec vagrant 2.0.3 et oracle virtual box 5.2.8
 
+Si besoin, nous avons avec nous les installs `vagrant_2.0.3_x86_64.msi` et `VirtualBox-5.2.8-121009-Win.exe`
+
+
 
 Copier les fichiers `devoxx2018_v1.1.box` et `Vagrantfile` depuis la clef usb vers le répertoire de travail de votre choix.
 
@@ -14,6 +17,7 @@ Vagrant va monter la box dans virtual box et la booter.
 
 Arrêtez et re-lancer la:
 `vagrant halt`
+
 `vagrant up`
 
 Faites un `vagrant ssh` pour vous connecter à la VM.
