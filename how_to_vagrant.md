@@ -10,7 +10,7 @@ Copier les fichiers `devoxx2018_v1.2.box` et `Vagrantfile` depuis la clef usb ve
 
 Dans votre repertoire de travail executez la commande suivante :
 
-`vagrant box add devoxx2018_v1.1.box --name devoxx_box`
+`vagrant box add devoxx2018_v1.2.box --name devoxx_box`
 
 Vous devriez voir un message se terminant par 
 ```==> box: Successfully added box 'devoxx_box' (v0) for 'virtualbox'!```
