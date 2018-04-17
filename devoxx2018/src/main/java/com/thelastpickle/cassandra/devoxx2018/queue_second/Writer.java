@@ -7,9 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Cluster.Builder;
 import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.policies.DCAwareRoundRobinPolicy;
@@ -17,19 +15,18 @@ import com.datastax.driver.core.policies.TokenAwarePolicy;
 import com.datastax.driver.core.utils.UUIDs;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.RateLimiter;
 
 
 
 public final class Writer {
-  private static final String USER_ID = "alex";
+  public static final String USER_ID = "alex";
 
   public static void write(int messagesToInsert, int rateLimit) {
     RateLimiter rateLimiter = RateLimiter.create(rateLimit);
 
     Cluster cluster = Cluster.builder()
-        .addContactPoint("54.200.68.60")
+        .addContactPoint("127.0.0.1")
         .withLoadBalancingPolicy(new TokenAwarePolicy(DCAwareRoundRobinPolicy.builder().build()))
         .build();
     Session session = cluster.connect("devoxx");
@@ -40,7 +37,7 @@ public final class Writer {
     List<ResultSetFuture> futures = Lists.newArrayList();
     for (int i = 0; i <= messagesToInsert; i++) {
       UUID idMessage = UUIDs.timeBased();
-      int idQueue = i % 10;
+      int idQueue = i % 10; // répartition des queues sur 10 partitions
       String payload = RandomStringUtils.random(50, true, true);
 
       rateLimiter.acquire();
