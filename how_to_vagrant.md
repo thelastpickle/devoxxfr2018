@@ -4,7 +4,7 @@ Si besoin, nous avons avec nous les installs `vagrant_2.0.3_x86_64.msi` et `Virt
 
 
 
-Copier les fichiers `devoxx2018_v1.1.box` et `Vagrantfile` depuis la clef usb vers le répertoire de travail de votre choix.
+Copier les fichiers `devoxx2018_v1.2.box` et `Vagrantfile` depuis la clef usb vers le répertoire de travail de votre choix.
 
 
 
