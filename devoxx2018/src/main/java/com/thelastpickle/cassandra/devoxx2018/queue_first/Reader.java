@@ -28,7 +28,7 @@ public final class Reader implements Runnable {
   @Override
   public void run() {
     Cluster cluster = Cluster.builder()
-        .addContactPoint("54.200.68.60")
+        .addContactPoint("52.43.224.73")
         .withLoadBalancingPolicy(new TokenAwarePolicy(DCAwareRoundRobinPolicy.builder().build()))
         .withRetryPolicy(DowngradingConsistencyRetryPolicy.INSTANCE)
         .withQueryOptions(new QueryOptions().setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM))
@@ -43,33 +43,38 @@ public final class Reader implements Runnable {
 
     for (int i = 0; i <= messagesToRead; i++) {
       int idQueue = 1;
+      try {
+        ResultSet resultSet = session.execute(readStatement.bind(idQueue));
+        Row row = resultSet.one();
+        if (row != null) {
+          UUID idMessage = row.getUUID("id_message");
 
-      ResultSet resultSet = session.execute(readStatement.bind(idQueue));
-      Row row = resultSet.one();
-      if (row != null) {
-        UUID idMessage = row.getUUID("id_message");
+          // Delete async
+          ResultSetFuture del = session.executeAsync(deleteStatement.bind(idQueue, idMessage));
 
-        // Delete async
-        ResultSetFuture del = session.executeAsync(deleteStatement.bind(idQueue, idMessage));
+          // ack sync
+          session.execute(
+              ackStatement.bind(row.getString("payload"), row.getString("published_by"), Arrays.asList(Writer.USER_ID), idQueue, idMessage));
 
-        // ack sync
-        session.execute(
-            ackStatement.bind(row.getString("payload"), row.getString("published_by"), Arrays.asList(Writer.USER_ID), idQueue, idMessage));
+          // on attend que le delete soit acquitté
+          del.getUninterruptibly();
 
-        // on attend que le delete soit acquitté
-        del.getUninterruptibly();
-
-        System.out.println("Traité : " + idMessage);
-        System.out.println("Messages lus et acquittés : " + (i + 1));
+          System.out.println("Traité : " + idMessage);
+          System.out.println("Messages lus et acquittés : " + (i + 1));
+        }
+        else {
+          System.out.println("Pas de message :'(");
+          try {
+            Thread.sleep(1000);
+          }
+          catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
       }
-      else {
-        System.out.println("Pas de message :'(");
-        try {
-          Thread.sleep(1000);
-        }
-        catch (InterruptedException e) {
-          e.printStackTrace();
-        }
+      catch (Exception e) {
+        System.out.println("Erreur pendant le traitement des messages");
+        e.printStackTrace();
       }
     }
 

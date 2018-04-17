@@ -25,7 +25,7 @@ public final class Writer {
     RateLimiter rateLimiter = RateLimiter.create(rateLimit);
 
     Cluster cluster = Cluster.builder()
-        .addContactPoint("127.0.0.1")
+        .addContactPoint("52.43.224.73")
         .withLoadBalancingPolicy(new TokenAwarePolicy(DCAwareRoundRobinPolicy.builder().build()))
         .build();
     Session session = cluster.connect("devoxx");
