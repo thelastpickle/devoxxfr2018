@@ -27,7 +27,9 @@ Faites un `vagrant ssh` pour vous connecter à la VM.
 
 
 
-Les commandes utiles :
+Quelques commandes utiles :
+
+`sudo ccm create devoxx2018 -v binary:3.0.16 -n 3`
 
 `sudo ccm start`
 
@@ -37,15 +39,20 @@ Les commandes utiles :
 
 `sudo ccm node1 nodetool info`
 
+
+Vagrant propose un repertoire partagé avec votre OS sous le repertoire `/vagrant` dans votre box 
+
+Exemple d'utilisation:
 `/vagrant/cdm install movielens`
+
+et
 
 `java -jar /vagrant/target/devoxx2018-0.0.1-SNAPSHOT.jar`
 
 
 
-Attention, bien rajoutez `sudo` devant les commandes de créations :
 
-`sudo ccm create devoxx2018 -v binary:3.0.16 -n 3`
+
 
 
  
