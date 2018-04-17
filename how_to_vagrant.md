@@ -29,11 +29,11 @@ Faites un `vagrant ssh` pour vous connecter à la VM.
 
 Les commandes utiles :
 
-`sudo ccm start;`
+`sudo ccm start`
 
-`sudo ccm status;`
+`sudo ccm status`
 
-`sudo ccm node1 cqlsh;`
+`sudo ccm node1 cqlsh`
 
 `sudo ccm node1 nodetool info`
 
