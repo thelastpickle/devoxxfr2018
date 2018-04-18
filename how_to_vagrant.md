@@ -18,7 +18,7 @@ Vous devriez voir un message se terminant par
 
 Vagrant va monter la box dans virtual box et la booter.
 
-Arrêtez et re-lancer la:
+Arrêtez et re-lancez la:
 `vagrant halt`
 
 `vagrant up`
@@ -38,6 +38,8 @@ Quelques commandes utiles :
 `sudo ccm node1 cqlsh`
 
 `sudo ccm node1 nodetool info`
+
+`sudo ccm node1 nodetool status`
 
 
 Vagrant propose un repertoire partagé avec votre OS sous le repertoire `/vagrant` dans votre box 
