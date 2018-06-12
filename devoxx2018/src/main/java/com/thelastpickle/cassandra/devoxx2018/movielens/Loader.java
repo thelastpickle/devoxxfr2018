@@ -56,13 +56,13 @@ public class Loader {
 
       if (futures.size() % 100 == 0) {
         Futures.successfulAsList(futures);
-        System.out.println(i + " films traités...");
+        System.out.println(i + " processed movies...");
         futures = Lists.newArrayList();
       }
     }
 
     Futures.successfulAsList(futures);
-    System.out.println(i + " films traités...");
+    System.out.println(i + " processed movies...");
     cluster.close();
   }
 
